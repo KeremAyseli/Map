@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL);
 date_default_timezone_set('Europe/Istanbul');
-
+setlocale(LC_ALL,"US");
 
 require_once __DIR__ . './constants.php';
 
@@ -74,8 +74,11 @@ foreach ($filesPath as $filePath) {
 
     //Replace itemDescription element text it's Turkish letter with it's corresponding letter in english.
     //deliveryDateLatest element text date format change to 01Jun2022 to 01012022.
+    echo mb_detect_encoding($xmlProductsElement[0]["itemDescription"]);
+    var_dump (mb_convert_encoding($xmlProductsElement[0]["itemDescription"],"UTF-8","ISO-8859-1" ));
     for ($i = 0; $i < count($xmlProductsElement); $i++) {
-        $xmlProductsElement[$i]["itemDescription"] = replaceTrChars($xmlProductsElement[$i]["itemDescription"]);
+        // $xmlProductsElement[$i]["itemDescription"] = replaceTrChars($xmlProductsElement[$i]["itemDescription"]);
+        $xmlProductsElement[$i]["itemDescription"] =str_replace("\"","", iconv("UTF-8","ASCII//TRANSLIT",$xmlProductsElement[$i]["itemDescription"]));
         $xmlProductsElement[$i]["deliveryDateLatest"] = date("dmy", strtotime($xmlProductsElement[$i]["deliveryDateLatest"]));
     }
 
