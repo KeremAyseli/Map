@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL);
 date_default_timezone_set('Europe/Istanbul');
-setlocale(LC_ALL,"US");
+setlocale(LC_ALL, "US");
 
 require_once __DIR__ . './constants.php';
 
@@ -75,8 +75,12 @@ foreach ($filesPath as $filePath) {
     //Replace itemDescription element text it's Turkish letter with it's corresponding letter in english.
     //deliveryDateLatest element text date format change to 01Jun2022 to 01012022.
     for ($i = 0; $i < count($xmlProductsElement); $i++) {
-        // $xmlProductsElement[$i]["itemDescription"] = replaceTrChars($xmlProductsElement[$i]["itemDescription"]);
-        $xmlProductsElement[$i]["itemDescription"] =str_replace("\"","", iconv("UTF-8","ASCII//TRANSLIT",$xmlProductsElement[$i]["itemDescription"]));
+
+        $xmlProductsElement[$i]["itemDescription"] = str_replace(
+            "\"",
+            "",
+            iconv("UTF-8", "ASCII//TRANSLIT", $xmlProductsElement[$i]["itemDescription"])
+        );
         $xmlProductsElement[$i]["deliveryDateLatest"] = date("dmy", strtotime($xmlProductsElement[$i]["deliveryDateLatest"]));
     }
 
@@ -122,22 +126,4 @@ foreach ($filesPath as $filePath) {
 
     //XML document save //!Storage/out/
     $xml->asXML(OUT_PATH . "/" . $fileName . ".xml");
-}
-
-
-function replaceTrChars($str)
-{
-    static $turkishLetter = [
-        "Ãœ", "Å", "Ä", "Ã‡", "Ä°", "Ã–", "Ã¼", "ÅŸ", "Ã§", "Ä±", "Ã¶", "ÄŸ",
-        "Ü", "Ş", "Ğ", "Ç", "İ", "Ö", "ü", "ş", "ç", "ı", "ö", "ğ",
-        "%u015F", "%E7", "%FC", "%u0131", "%F6", "%u015E", "%C7", "%DC", "%D6",
-        "%u0130", "%u011F", "%u011E"
-    ];
-    static $englishLetter = [
-        'U', "S", "G", "C", "I", "O", "u", "s", "c", "i", "o", "g",
-        "U", "S", "G", "C", "I", "O", "u", "s", "c", "i", "o", "g",
-        "s", "c", "u", "i", "o", "S", "C", "U", "O", "I", "g", "G"
-    ];
-
-    return str_replace($turkishLetter, $englishLetter, $str);
 }
