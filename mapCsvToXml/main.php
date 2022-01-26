@@ -34,6 +34,7 @@ foreach ($filesPath as $filePath) {
     );
 
     //Get first line of csv file. First line is include elements name of header.
+   /**@var array */
     $xmlHeaderTag = array_shift($splittedLine);
 
     //Get second line of csv file. Second line is include text of elements.
@@ -57,7 +58,6 @@ foreach ($filesPath as $filePath) {
 
     //Get third line of csv file. Third line is include elements name of Product line.
     $productTag = array_shift($productRows);
-
 
     //Combine every productTag and productRows(after 4.csv line evert line is a product info) as key and value.
     //Check productTag and every product text count is equal.
